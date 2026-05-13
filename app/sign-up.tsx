@@ -33,7 +33,7 @@ export default function SignupScreen() {
             }}
           />
           <Text style={styles.createAccount}>
-            Already have an account?{" "}
+            Already have an account?{"  "}
             <Text
               onPress={() => router.push("/(login)")}
               style={{ color: Colors.primary }}

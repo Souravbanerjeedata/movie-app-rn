@@ -23,6 +23,7 @@ export default function LoginScreen() {
           />
           <Text style={styles.forget}>Forget Password?</Text>
           <AppButton
+            onPress={() => router.push("/(tabs)/(home)")}
             title="Login"
             style={{
               backgroundColor: Colors.primary,
@@ -32,7 +33,7 @@ export default function LoginScreen() {
             }}
           />
           <Text style={styles.createAccount}>
-            Haven&apos;t signed up yet?{" "}
+            Haven&apos;t signed up yet?{"  "}
             <Text
               onPress={() => router.push("/sign-up")}
               style={{ color: Colors.primary }}
