@@ -15,7 +15,18 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => router.push("/details")}
+      onPress={() =>
+        router.push({
+          pathname: "/details",
+          params: {
+            title: movie?.original_title || movie?.original_name,
+            backdrop_path: movie?.backdrop_path,
+            date: movie?.release_date,
+            genre_ids: movie?.genre_ids,
+            overview: movie?.overview,
+          },
+        })
+      }
       activeOpacity={0.8}
       style={styles.container}
     >

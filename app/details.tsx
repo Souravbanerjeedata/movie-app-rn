@@ -2,10 +2,13 @@ import AppButton from "@/components/AppButton";
 import MovieCard from "@/components/MovieCard";
 import SectionHeader from "@/components/SectionHeader";
 import Colors from "@/constants/colors";
-import { movies } from "@/constants/mock-data";
+import { TMDB_IMAGE_BASE_PATH, useFetch } from "@/hooks/useFetch";
+import { Movie } from "@/types";
+import { default_image } from "@/utils/assets";
+import { getGenreString } from "@/utils/genre";
 import { AntDesign, Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
   FlatList,
@@ -21,13 +24,31 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const DetailsScreen = () => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { title, backdrop_path, date, genre_ids, overview } =
+    useLocalSearchParams<any>();
+  const yearReleased = date?.split("-")[0] ?? "";
+  const backdrop_image = backdrop_path
+    ? `${TMDB_IMAGE_BASE_PATH}${backdrop_path}`
+    : null;
+
+  const params = {
+    include_adult: false,
+    include_video: false,
+    language: "en-us",
+    page: 3,
+    sort_by: "popularity.desc",
+  };
+
+  const { data } = useFetch("/discover/movie", params);
+  const similarMovies: Movie[] = data?.results;
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.overview}>
           <Image
             style={styles.overviewImage}
-            source={require("@/assets/images/overview.png")}
+            source={backdrop_image ? { uri: backdrop_image } : default_image}
           />
           <View style={[styles.cover, { paddingTop: insets.top }]}>
             <View style={{ flex: 1, paddingHorizontal: 14 }}>
@@ -51,10 +72,10 @@ const DetailsScreen = () => {
                   color: Colors.text,
                 }}
               >
-                The Sandman
+                {title}
               </Text>
               <Text style={{ color: Colors.gray }}>
-                2025 | Monster Horror | Sci-Fi Epic
+                {`${yearReleased} | ${getGenreString(genre_ids.split(",") || [])}`}
               </Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <AntDesign name="star" size={16} color="#ff891b" />
@@ -110,23 +131,15 @@ const DetailsScreen = () => {
               Overview
             </Text>
             <Text style={{ color: Colors.text, marginTop: 10, fontSize: 12 }}>
-              Upon escaping after decades of imprisonment by a mortal wizard,
-              Dream, the personification of dreams, sets about to reclaim his
-              lost equipment.
+              {overview}
             </Text>
           </View>
         </View>
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="You may also like" />
           <FlatList
-            data={movies}
-            renderItem={({ item }) => (
-              <MovieCard
-                image={item.image}
-                title={item.title}
-                genre={item.genre}
-              />
-            )}
+            data={similarMovies}
+            renderItem={({ item }) => <MovieCard movie={item} />}
             horizontal
           />
         </View>

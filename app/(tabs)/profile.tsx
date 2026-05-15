@@ -2,6 +2,8 @@ import MovieCard from "@/components/MovieCard";
 import SectionHeader from "@/components/SectionHeader";
 import Colors from "@/constants/colors";
 import { ms } from "@/constants/screen-dimensions";
+import { useFetch } from "@/hooks/useFetch";
+import { Movie } from "@/types";
 import {
   FlatList,
   Image,
@@ -12,6 +14,23 @@ import {
 } from "react-native";
 
 export default function ProfileScreen() {
+  const params = {
+    include_adult: false,
+    include_video: false,
+    language: "en-us",
+    page: 3,
+    sort_by: "popularity.desc",
+  };
+
+  const { data: yesterdayData } = useFetch("/discover/movie", params);
+  const { data: dateData } = useFetch("/discover/movie", {
+    ...params,
+    page: 2,
+  });
+
+  const yesterdayMovies: Movie[] = yesterdayData?.results;
+  const dateMovies: Movie[] = dateData?.results;
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -43,31 +62,19 @@ export default function ProfileScreen() {
         >
           Watch History
         </Text>
-        <View style={{ marginVertical: 20 }}>
+        <View style={{ marginVertical: 12 }}>
           <SectionHeader title="Yesterday" />
           <FlatList
-            data={movies}
-            renderItem={({ item }) => (
-              <MovieCard
-                image={item.image}
-                title={item.title}
-                genre={item.genre}
-              />
-            )}
+            data={yesterdayMovies || []}
+            renderItem={({ item }) => <MovieCard movie={item} />}
             horizontal
           />
         </View>
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="15th October, 2025" />
           <FlatList
-            data={[...movies].reverse()}
-            renderItem={({ item }) => (
-              <MovieCard
-                image={item.image}
-                title={item.title}
-                genre={item.genre}
-              />
-            )}
+            data={dateMovies || []}
+            renderItem={({ item }) => <MovieCard movie={item} />}
             horizontal
           />
         </View>
