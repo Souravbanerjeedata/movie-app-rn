@@ -1,7 +1,6 @@
 import MovieCard from "@/components/MovieCard";
 import SectionHeader from "@/components/SectionHeader";
 import Colors from "@/constants/colors";
-import { movies } from "@/constants/mock-data";
 import { ms } from "@/constants/screen-dimensions";
 import {
   FlatList,
