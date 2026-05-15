@@ -37,20 +37,26 @@ export default function TabsLayout() {
         name="movies"
         options={{
           tabBarLabel: "Movies",
-          headerShown: false,
+          headerTitle: "",
           tabBarIcon: ({ color }) => (
             <Feather name="play-circle" size={20} color={color} />
           ),
+          headerStyle: { backgroundColor: Colors.background },
+          headerRight: () => <RightIcon />,
+          headerLeft: () => <Text style={styles.title}>Movies</Text>,
         }}
       />
       <Tabs.Screen
         name="series"
         options={{
           tabBarLabel: "TV/Series",
-          headerShown: false,
+          headerTitle: "",
           tabBarIcon: ({ color }) => (
             <Feather name="folder" size={20} color={color} />
           ),
+          headerStyle: { backgroundColor: Colors.background },
+          headerRight: () => <RightIcon />,
+          headerLeft: () => <Text style={styles.title}>Series</Text>,
         }}
       />
       <Tabs.Screen
