@@ -1,5 +1,6 @@
 import Colors from "@/constants/colors";
 import { hs, ms, vs } from "@/constants/screen-dimensions";
+import { useRouter } from "expo-router";
 import {
   Image,
   ImageSourcePropType,
@@ -16,8 +17,14 @@ interface MovieCardProps {
 }
 
 const MovieCard = ({ image, title, genre }: MovieCardProps) => {
+  const router = useRouter();
+
   return (
-    <TouchableOpacity activeOpacity={0.8} style={styles.container}>
+    <TouchableOpacity
+      onPress={() => router.push("/details")}
+      activeOpacity={0.8}
+      style={styles.container}
+    >
       <Image source={image} style={styles.image} />
       <View>
         <Text
