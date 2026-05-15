@@ -3,26 +3,61 @@ import MovieCard from "@/components/MovieCard";
 import OverviewSection from "@/components/OverviewSection";
 import SectionHeader from "@/components/SectionHeader";
 import Colors from "@/constants/colors";
-import { movies } from "@/constants/mock-data";
+import { useFetch } from "@/hooks/useFetch";
+import { Movie } from "@/types";
 import { FlatList, ScrollView, StyleSheet, View } from "react-native";
 
+function getRandomMovie(movies: Movie[]): Movie | null {
+  if (!movies?.length) return null;
+  const withBackdrops = movies.filter((movie) => movie.backdrop_path);
+  if (!withBackdrops.length) return null;
+  const randomMovie =
+    withBackdrops[Math.floor(Math.random() * withBackdrops.length)];
+    return randomMovie;
+}
+
 export default function HomeScreen() {
+  const currentYear = new Date().getFullYear();
+  const params = {
+    include_adult: false,
+    include_video: false,
+    language: "en-US",
+    page: 1,
+    sort_by: "popularity.desc",
+  };
+
+  const { data: trendingData, loading: trendingLoading } = useFetch(
+    "/discover/movie",
+    params,
+  );
+
+  const { data: newReleasesData, loading: newReleasesLoading } = useFetch(
+    "/discover/movie",
+    { ...params, primary_release_year: currentYear },
+  );
+
+  const { data: internationalPicksData, loading: internationalPicksLoading } =
+    useFetch("/discover/tv", params);
+
+  const { data: continueWatchingData, loading: continueWatchingLoading } =
+    useFetch("/discover/tv", { ...params, page: 2 });
+
+  const trendingMovies: Movie[] = trendingData?.results;
+  const newReleasesMovies: Movie[] = newReleasesData?.results;
+  const internationalPicksMovies: Movie[] = internationalPicksData?.results;
+  const continueWatchingMovies: Movie[] = continueWatchingData?.results;
+  const overviewMovie = getRandomMovie(trendingMovies);
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        <OverviewSection />
+        <OverviewSection movie={overviewMovie} />
         {/* Trending Now */}
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="Trending now 🔥" />
           <FlatList
-            data={movies}
-            renderItem={({ item }) => (
-              <MovieCard
-                image={item.image}
-                title={item.title}
-                genre={item.genre}
-              />
-            )}
+            data={trendingMovies}
+            renderItem={({ item }) => <MovieCard movie={item} />}
             horizontal
           />
         </View>
@@ -31,13 +66,9 @@ export default function HomeScreen() {
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="Continue Watching" />
           <FlatList
-            data={[...movies].reverse()}
+            data={continueWatchingMovies}
             renderItem={({ item }) => (
-              <ContinueWatchingMovieCard
-                title={item.title}
-                image={item.image}
-                genre={item.genre}
-              />
+              <ContinueWatchingMovieCard movie={item} />
             )}
             horizontal
           />
@@ -47,14 +78,8 @@ export default function HomeScreen() {
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="New Releases 🚀" />
           <FlatList
-            data={movies}
-            renderItem={({ item }) => (
-              <MovieCard
-                image={item.image}
-                title={item.title}
-                genre={item.genre}
-              />
-            )}
+            data={newReleasesMovies}
+            renderItem={({ item }) => <MovieCard movie={item} />}
             horizontal
           />
         </View>
@@ -63,14 +88,8 @@ export default function HomeScreen() {
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="International Picks 🌎" />
           <FlatList
-            data={[...movies].reverse()}
-            renderItem={({ item }) => (
-              <MovieCard
-                image={item.image}
-                title={item.title}
-                genre={item.genre}
-              />
-            )}
+            data={internationalPicksMovies}
+            renderItem={({ item }) => <MovieCard movie={item} />}
             horizontal
           />
         </View>
