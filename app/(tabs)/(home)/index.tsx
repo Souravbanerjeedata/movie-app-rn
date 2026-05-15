@@ -30,10 +30,9 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <ScrollView>
         <OverviewSection />
-        <View style={{ flex: 1 }}>
-          <View style={{ marginVertical: 20 }}>
-            <SectionHeader title="Trending now 🔥" />
-          </View>
+        {/* Trending Now */}
+        <View style={{ marginVertical: 20 }}>
+          <SectionHeader title="Trending now 🔥" />
           <FlatList
             data={movies}
             renderItem={({ item }) => (
@@ -46,12 +45,52 @@ export default function HomeScreen() {
             horizontal
           />
         </View>
+
+        {/* Continue Watching */}
         <View style={{ marginVertical: 20 }}>
           <SectionHeader title="Continue Watching" />
-          <ContinueWatchingMovieCard
-            title="The Sandman"
-            image={require("@/assets/images/movie1.png")}
-            genre="Action | Drama"
+          <FlatList
+            data={[...movies].reverse()}
+            renderItem={({ item }) => (
+              <ContinueWatchingMovieCard
+                title={item.title}
+                image={item.image}
+                genre={item.genre}
+              />
+            )}
+            horizontal
+          />
+        </View>
+
+        {/* New Releases */}
+        <View style={{ marginVertical: 20 }}>
+          <SectionHeader title="New Releases 🚀" />
+          <FlatList
+            data={movies}
+            renderItem={({ item }) => (
+              <MovieCard
+                image={item.image}
+                title={item.title}
+                genre={item.genre}
+              />
+            )}
+            horizontal
+          />
+        </View>
+
+        {/* International Picks */}
+        <View style={{ marginVertical: 20 }}>
+          <SectionHeader title="International Picks 🌎" />
+          <FlatList
+            data={[...movies].reverse()}
+            renderItem={({ item }) => (
+              <MovieCard
+                image={item.image}
+                title={item.title}
+                genre={item.genre}
+              />
+            )}
+            horizontal
           />
         </View>
       </ScrollView>
