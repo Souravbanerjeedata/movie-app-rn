@@ -3,12 +3,12 @@
 A modern, beautiful **React Native** movie discovery and streaming app built with **Expo** and **TypeScript**. Browse trending movies & TV series, search, view details, and enjoy a Netflix-like experience.
 
 <div align="center">
-    <img src="public/readme/preview(1).png" alt="Project Banner" width='150' height='300' >
-    <img src="public/readme/preview(2).png" alt="Project Banner" width='150' height='300'>
-    <img src="public/readme/preview(3).png" alt="Project Banner" width='150' height='300'>
-    <img src="public/readme/preview(4).png" alt="Project Banner" width='150' height='300'>
-    <img src="public/readme/preview(5).png" alt="Project Banner" width='150' height='300'>
-    <img src="public/readme/preview(6).png" alt="Project Banner" width='150' height='300'>
+    <img src="public/readme/preview (1).png" alt="Project Banner" width='150' height='300' >
+    <img src="public/readme/preview (2).png" alt="Project Banner" width='150' height='300'>
+    <img src="public/readme/preview (3).png" alt="Project Banner" width='150' height='300'>
+    <img src="public/readme/preview (4).png" alt="Project Banner" width='150' height='300'>
+    <img src="public/readme/preview (5).png" alt="Project Banner" width='150' height='300'>
+    <img src="public/readme/preview (6).png" alt="Project Banner" width='150' height='300'>
 </div>
 
 ## ✨ Features
